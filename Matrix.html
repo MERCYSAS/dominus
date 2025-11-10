@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Взлом...</title>
+    <style>
+        body { margin: 0; background: black; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <script>
+        // Этот скрипт рисует эффект Матрицы на HTML Canvas
+        var c = document.getElementById("c");
+        var ctx = c.getContext("2d");
+
+        // Установка размера экрана
+        c.height = window.innerHeight;
+        c.width = window.innerWidth;
+
+        // Символы Матрицы (кандзи, катакана, цифры)
+        var chinese = "日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾚﾛﾝ0123456789";
+        chinese = chinese.split("");
+
+        var font_size = 10;
+        var columns = c.width / font_size; 
+        var drops = [];
+        for (var x = 0; x < columns; x++)
+            drops[x] = 1; 
+
+        function draw() {
+            // Полупрозрачный черный фон для эффекта "шлейфа"
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, c.width, c.height);
+
+            ctx.fillStyle = "#0F0"; // Зеленый цвет для символов
+            ctx.font = font_size + "px arial";
+            
+            for (var i = 0; i < drops.length; i++) {
+                // Выбор случайного символа
+                var text = chinese[Math.floor(Math.random() * chinese.length)];
+                
+                // Рисуем символ
+                ctx.fillText(text, i * font_size, drops[i] * font_size);
+
+                // Если капля достигла дна, или случайно, начинаем заново
+                if (drops[i] * font_size > c.height && Math.random() > 0.975)
+                    drops[i] = 0;
+
+                // Увеличение координаты Y (движение вниз)
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33); // Частота обновления (чем меньше, тем быстрее)
+    </script>
+</body>
+</html>
